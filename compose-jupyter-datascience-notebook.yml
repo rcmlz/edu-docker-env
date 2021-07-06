@@ -1,0 +1,20 @@
+# 0. if not already done:
+#    a.) install Docker Desktop from https://www.docker.com/products/docker-desktop
+#    b.) create folder ${HOME}/Documents/docker
+#    (e.g. in terminal via "mkdir -p $HOME/Documents/docker")
+# 1. start "Docker Desktop"
+# 2. start "terminal" (MacOS, Linux) or "cmd" (Windows)
+# 3. execute "cd ${HOME}/Documents/docker/edu-docker-env" (or wherever you have this file stored, e.g. by executing "git clone https://github.com/rcmlz/edu-docker-env")
+# 4. execute "docker compose --file compose-jupyter-datascience-notebook.yml up"
+services:
+  jupyter:
+      image: jupyter/datascience-notebook
+      ports:
+          - 8888:8888
+      volumes:
+          - type: bind
+            source: ${HOME}/Documents/docker
+            target: /home/jovyan/Documents/docker
+      environment:
+          JUPYTER_ENABLE_LAB: "yes"
+          #JUPYTER_TOKEN: "0000" # would effectively disable authentication by setting to an easy password like 0000 in this example
