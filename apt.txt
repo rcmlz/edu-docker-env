@@ -1,72 +1,16 @@
-#Gap
-gcc
-build-essential
+# for debugging
+vim
+nano
+
+# Readline:ver<0.1.8>:auth<zef:clarkema>
+# https://packages.ubuntu.com/search?keywords=libreadline&searchon=names&suite=jammy&section=all
+libreadline-dev
 libzmq5-dev
-
-#Maxima
-build-essential
-gnuplot
-sbcl
-texinfo
-libzmq5-dev
-
-# calysto
-libcairo2-dev
-libxrender-dev
-libfontconfig-dev
-
-# Unknown
-libunwind-dev
-
-#R packages
-libudunits2-dev
-
-# for latest rakudo-star bundle
-# instruction taken from see https://rakudo.org/star/source
-build-essential
 libssl-dev
-git
+build-essential
 
-# for raku kernel
-# instruction taken from https://github.com/bduggan/p6-jupyter-kernel
-libzmq5-dev
-
-#octave
-gnuplot
-
-#perl
-libzmq5-dev
 cpanminus
 
-# rust
-libzmq5-dev
-
-# ruby
-build-essential
-ruby
-ruby-dev
-libzmq5-dev
-gnuplot-nox
-libgsl0-dev
-libtool
-autoconf
-automake
-zlib1g-dev
-libsqlite3-dev
-libmagick++-dev
-imagemagick
-libatlas-base-dev
-libtool-bin
-
-#Jupyter-LaTeX - nice to have for exporting to pdf
 texlive-full
-fonts-gfs-bodoni-classic
-fonts-gfs-didot-classic
-fonts-gfs-gazis
-fonts-gfs-theokritos
-fonts-freefont-otf
-fonts-freefont-ttf
-context-modules
-gsfonts
 gnuplot
 ghostscript

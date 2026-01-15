@@ -8,7 +8,7 @@ ARG MAINTAINER=rcmlz
 #see https://github.com/jupyter/docker-stacks/blob/master/datascience-notebook/Dockerfile
 ARG BASE_CONTAINER=jupyter/datascience-notebook
 FROM $BASE_CONTAINER
-LABEL maintainer=$MAINTAINER
+LABEL maintainer=rcmlz
 
 ###############################################################################
 # apt
@@ -27,223 +27,75 @@ RUN    echo "Acquire::http::Pipeline-Depth 0;" >  /etc/apt/apt.conf.d/99fixbadpr
     && apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 ###############################################################################
-# conda
+# pip
 WORKDIR /tmp
 USER root
-RUN conda config --add channels defaults
-RUN conda config --add channels conda-forge
-RUN conda config --add channels bioconda
-
-ARG ENV_NAME=base
-RUN conda install -y -n $ENV_NAME mamba
-RUN mamba install -y -n $ENV_NAME jupyterlab-git
-RUN mamba install -y -n $ENV_NAME rise
-RUN mamba install -y -n $ENV_NAME xeus-cling
-RUN mamba install -y -n $ENV_NAME xeus-sqlite
-RUN mamba install -y -n $ENV_NAME soci-sqlite
-RUN mamba install -y -n $ENV_NAME metakernel
-RUN mamba install -y -n $ENV_NAME openjdk
-RUN mamba install -y -n $ENV_NAME bash_kernel
-RUN mamba install -y -n $ENV_NAME setuptools
-RUN mamba install -y -n $ENV_NAME elm
-RUN mamba install -y -n $ENV_NAME coq-jupyter
-RUN mamba install -y -n $ENV_NAME setuptools wheel
-RUN mamba install -y -n $ENV_NAME octave_kernel
-RUN mamba install -y -n $ENV_NAME octave
-RUN mamba install -y -n $ENV_NAME texinfo
-
-RUN conda config --add channels jetbrains
-RUN mamba install -y -n $ENV_NAME kotlin-jupyter-kernel -c jetbrains
-
-RUN conda clean --all
+COPY requirements.txt .
+#RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 ###############################################################################
-# pip - everything we did not find on conda
+# raku
+###############################################################################
 WORKDIR /tmp
 USER root
-RUN pip install emu86
-RUN pip install jupyter-c-kernel
-RUN pip install elm_kernel
-RUN pip install gnuplot_kernel
-
-RUN rm -rf ${HOME}/.cache
+ARG RAKUVERSION='moar-2025.12'
+ENV PATH=$PATH:/home/jovyan/.rakubrew/versions/$RAKUVERSION/install/share/perl6/site/bin:/usr/share/perl6/core/bin:/usr/share/perl6/site/bin:/usr/share/perl6/vendor/bin
+RUN curl -LJO https://rakubrew.org/install-on-perl.sh && \
+    sh install-on-perl.sh && \
+    eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
+    echo 'eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"' >> ~/.bashrc && \
+    rakubrew build $RAKUVERSION && \
+    raku --version
 
 ###############################################################################
-# Assembly
+# zef
+###############################################################################
 WORKDIR /tmp
+ENV PATH=$PATH:$HOME/.raku/bin
 USER root
-RUN python -m kernels.intel.install
-RUN     rm -rf /tmp/* \
-     && fix-permissions "${HOME}"
+RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
+    git clone https://github.com/ugexe/zef.git && \
+    cd zef && \
+    raku -I. bin/zef install .
 
 ###############################################################################
-# C
-WORKDIR /tmp
-USER root
-RUN install_c_kernel
-RUN     rm -rf /tmp/* \
-     && fix-permissions "${HOME}"
-
+# raku packages
 ###############################################################################
-# Elm
-WORKDIR /tmp
+COPY raku-packages.txt .
 USER root
-RUN python -m elm_kernel.install
-RUN     rm -rf /tmp/* \
-     && fix-permissions "${HOME}"
-
-###############################################################################
-# Gap
-WORKDIR /tmp
-USER root
-
-ARG GAP_VERSION=4.11.1
-ARG Jupyter_Kernel_VERSION=1.3
-ENV GAP_DIR=/usr/local/share/gap
-ENV GAP=/usr/local/share/gap/bin/gap
-ARG GAP_PKG=$GAP_DIR/pkg
-ENV PATH=PATH=$GAP_DIR/bin:$GAP_PKG/JupyterKernel-$Jupyter_Kernel_VERSION/bin:$PATH
-
-RUN wget --quiet https://github.com/gap-system/gap/releases/download/v$GAP_VERSION/gap-$GAP_VERSION.tar.gz \
-    && tar xfz gap-$GAP_VERSION.tar.gz \
-    && mv gap-$GAP_VERSION $GAP_DIR \
-    && cd $GAP_DIR \
-    && ./configure; make \
-    && bin/BuildPackages.sh --with-gaproot=$GAP_DIR \
-    && ln -s $GAP_DIR/bin/gap.sh $GAP_DIR/bin/gap \
-    && $GAP_DIR/bin/gap --nointeract -c 'LoadPackage("PackageManager");InstallPackage("io",false);InstallPackage("json",false);InstallPackage("zeromqinterface",false);InstallPackage("crypting",false);' \
-    && cd $GAP_PKG/JupyterKernel-$Jupyter_Kernel_VERSION \
-    && python setup.py install
-
-RUN     rm -rf /tmp/* \
-     && fix-permissions "${HOME}"
-
-###############################################################################
-# Gnuplot
-WORKDIR /tmp
-USER root
-RUN python -m gnuplot_kernel install
-
-RUN     rm -rf /tmp/* \
-     && fix-permissions "${HOME}"
-
-###############################################################################
-# Java
-WORKDIR /tmp
-USER root
-
-RUN curl -Lo IJava.zip https://github.com/SpencerPark/IJava/releases/download/v1.3.0/ijava-1.3.0.zip \
-    && unzip IJava.zip \
-    && python3 install.py --sys-prefix
-
-RUN  rm -rf /tmp/* \
-     && fix-permissions "${HOME}"
-
-###############################################################################
-# JS
-WORKDIR /tmp
-USER root
-RUN conda update -c conda-forge nodejs
-RUN    npm install -g --unsafe-perm ijavascript \
-    && ijsinstall
-
-RUN     rm -rf /tmp/* \
-     && fix-permissions "${HOME}"
-
-###############################################################################
-# Maxima
-WORKDIR /tmp
-USER root
-
-ARG MAXIMA_PREFIX=/usr/local/share/maxima
-ARG MAXIMA_VERSION=5.45.1
-ENV PATH=$MAXIMA_PREFIX/bin/:${PATH}
-RUN    mkdir -p $MAXIMA_PREFIX \
-    && ulimit -s 16384 \
-    && curl -L https://sourceforge.net/projects/maxima/files/Maxima-source/$MAXIMA_VERSION-source/maxima-$MAXIMA_VERSION.tar.gz | tar -C /tmp -xzf - \
-    && cd /tmp/maxima-$MAXIMA_VERSION \
-    && CFLAGS="-Os" ./configure --prefix=$MAXIMA_PREFIX --enable-sbcl \
-    && make \
-    && make install
-
-RUN    curl -kLO https://beta.quicklisp.org/quicklisp.lisp \
-    && mkdir quicklisp \
-    && sbcl --non-interactive --load quicklisp.lisp --eval "(quicklisp-quickstart:install)" --eval "(ql-util:without-prompting (ql:add-to-init-file))"
-RUN    git clone https://github.com/robert-dodier/maxima-jupyter \
-    && cd maxima-jupyter && maxima --batch-string="load(\"load-maxima-jupyter.lisp\");jupyter_install();"
-
-RUN     rm -rf /tmp/* \
-     && fix-permissions "${HOME}"
+RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
+    ZEF_TEST_DEGREE=`raku -e "say $*Kernel.cpu-cores"` && \
+    ZEF_FETCH_DEGREE=$ZEF_TEST_DEGREE && \
+    zef update && \
+    PACKAGE_NAME='Jupyter::Chatbook:auth<zef:antononcube>'  && \
+    zef install --/test --deps-only "$PACKAGE_NAME" && \
+    zef install --/test "$PACKAGE_NAME" && \
+    jupyter-chatbook-raku --generate-config --location=/home/jovyan/.local/share/jupyter/kernels/chatbook-raku && \
+    cat raku-packages.txt | raku -e 'for $*IN.lines.grep(/^^\w/) { say shell "zef install --/test \"$_\"" }'
 
 ###############################################################################
 # Perl
 WORKDIR /tmp
 USER root
 COPY cpanfile /tmp/cpanfile
-RUN cpanm --notest --installdeps . \
-    && cpanm Devel::IPerl \
+RUN    cpanm --notest --installdeps . \
+    && cpanm --notest Alien::ZMQ::latest \
+    && cpanm --notest Devel::IPerl \
     && iperl --help
-RUN    rm -rf /tmp/* \
-    && fix-permissions "${HOME}"
 
 ###############################################################################
-# Raku
+# Julia
 WORKDIR /tmp
 USER root
-ARG RAKU_INSTALL_DIR=/usr/local/share/rakudo-star
-ENV PATH=$RAKU_INSTALL_DIR/bin/:$RAKU_INSTALL_DIR/share/perl6/site/bin:$RAKU_INSTALL_DIR/share/perl6/vendor/bin:$RAKU_INSTALL_DIR/share/perl6/core/bin:${PATH}
-RUN    mkdir $RAKU_INSTALL_DIR \
-    && cd $RAKU_INSTALL_DIR \
-    && curl -LJO https://rakudo.org/latest/star/src \
-    && tar -xzf rakudo-star-*.tar.gz \
-    && mv rakudo-star-*/* .  \
-    && rm -fr rakudo-star-*  \
-    && ./bin/rstar install \
-    && zef install Jupyter::Kernel \
-    && jupyter-kernel.raku --generate-config \
-    && zef install Physics::Measure Physics::Unit Physics::Constants SVG::Plot::Pie Metropolis Telemetry Log::Async Test::Fuzz
-
-RUN    rm -rf /tmp/* \
-    && fix-permissions "${HOME}"
+RUN julia -e 'import Pkg; Pkg.add("Pluto")'
 
 ###############################################################################
-# Ruby
+# JS
 WORKDIR /tmp
 USER root
-RUN    gem install ffi-rzmq \
-    && gem install iruby --pre \
-    && iruby register
-
-RUN    rm -rf /tmp/* \
-    && fix-permissions "${HOME}"
-
-###############################################################################
-# Rust
-WORKDIR "${HOME}"
-USER "${NB_UID}"
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
-    && source $HOME/.cargo/env \
-    && cargo install evcxr_jupyter --no-default-features \
-    && evcxr_jupyter --install
-
-RUN    rm -rf /tmp/* \
-    && fix-permissions "${HOME}"
-
-###############################################################################
-# Logos
-WORKDIR /tmp
-USER root
-RUN git clone https://github.com/rcmlz/edu-binder-env
-WORKDIR /tmp/edu-binder-env/ressources
-RUN cp assembler/logo-* $HOME/.local/share/jupyter/kernels/intel/
-RUN cp c/logo-* $HOME/.local/share/jupyter/kernels/c/
-RUN cp raku/logo-* $HOME/.local/share/jupyter/kernels/raku/
-
-RUN cp bash/logo-* /opt/conda/share/jupyter/kernels/bash/
-RUN cp java/logo-* /opt/conda/share/jupyter/kernels/java/
-
-RUN cp elm/logo-* /usr/local/share/jupyter/kernels/elm/
-RUN cp coq/logo-* /usr/local/share/jupyter/kernels/coq/
+RUN  npm install -g --unsafe-perm ijavascript \
+    && ijsinstall
 
 ###############################################################################
 # clean up
