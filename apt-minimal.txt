@@ -1,0 +1,10 @@
+vim
+nano
+git-lfs
+tree
+wget
+
+# Readline:ver<0.1.8>:auth<zef:clarkema>
+# https://packages.ubuntu.com/search?keywords=libreadline&searchon=names&suite=jammy&section=all
+libreadline-dev
+libzmq5-dev

@@ -15,7 +15,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # apt
 WORKDIR /tmp
 USER root
-COPY apt.txt /tmp/apt.txt
+#COPY apt.txt /tmp/apt.txt
+COPY apt-minimal.txt /tmp/apt.txt
 RUN    echo "Acquire::http::Pipeline-Depth 0;" >  /etc/apt/apt.conf.d/99fixbadproxy \
     && echo "Acquire::http::No-Cache true;"    >> /etc/apt/apt.conf.d/99fixbadproxy \
     && echo "Acquire::BrokenProxy true;"       >> /etc/apt/apt.conf.d/99fixbadproxy \
@@ -43,16 +44,18 @@ USER root
 ARG RAKUVERSION='moar-2025.12'
 ENV PATH=$PATH:/home/jovyan/.rakubrew/versions/$RAKUVERSION/install/share/perl6/site/bin:/usr/share/perl6/core/bin:/usr/share/perl6/site/bin:/usr/share/perl6/vendor/bin
 RUN curl -LJO https://rakubrew.org/install-on-perl.sh && \
-    sh install-on-perl.sh && \
+    chmod +x install-on-perl.sh && \
+    ./install-on-perl.sh && \
     eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
-    echo 'eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"' >> ~/.bashrc
+    echo 'eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"' >> ~/.bashrc && \
+    rakubrew build $RAKUVERSION
 
-RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
-    if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-            rakubrew download $RAKUVERSION; \
-    else \
-            rakubrew build $RAKUVERSION; \
-    fi
+#RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
+    #if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+    #        rakubrew download $RAKUVERSION; \
+    #else \
+    #        rakubrew build $RAKUVERSION; \
+    #fi
 
 ###############################################################################
 # zef
@@ -60,18 +63,23 @@ RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
 WORKDIR /tmp
 ENV PATH=$PATH:$HOME/.raku/bin
 USER root
-RUN if [ "$TARGETPLATFORM" != "linux/amd64" ]; then \
-            eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"; \
-            git clone https://github.com/ugexe/zef.git; \
-            cd zef; \
-            raku -I. bin/zef install . ; \
-    fi
+RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
+    git clone https://github.com/ugexe/zef.git && \
+    cd zef && \
+    raku -I. bin/zef install .
+
+#RUN if [ "$TARGETPLATFORM" != "linux/amd64" ]; then \
+#            eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"; \
+#            git clone https://github.com/ugexe/zef.git; \
+#            cd zef; \
+#            raku -I. bin/zef install . ; \
+#    fi
 
 ###############################################################################
 # raku packages
 ###############################################################################
 COPY raku-packages.txt .
-USER root
+USER "${NB_UID}"
 RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
     ZEF_TEST_DEGREE=`raku -e "say $*Kernel.cpu-cores"` && \
     ZEF_FETCH_DEGREE=$ZEF_TEST_DEGREE && \
