@@ -1,6 +1,27 @@
-# for debugging
 vim
 nano
+git-lfs
+git-crypt
+tree
+wget
+gnupg
+pciutils
+file
+p7zip
+zip
+unzip
+hyperfine
+
+cowsay
+lolcat
+fortune
+jp2a
+cbonsai
+aewan
+figlet
+
+jq
+ffmpeg
 
 # Readline:ver<0.1.8>:auth<zef:clarkema>
 # https://packages.ubuntu.com/search?keywords=libreadline&searchon=names&suite=jammy&section=all
@@ -14,3 +35,6 @@ cpanminus
 texlive-full
 gnuplot
 ghostscript
+pandoc
+imagemagick
+    

@@ -3,12 +3,13 @@ ARG MAINTAINER=rcmlz
 #ARG IMAGE_VERSION=1
 #ARG IMAGE_TAG=$MAINTAINER/$IMAGE_NAME:$IMAGE_VERSION
 #run: export DOCKER_BUILDKIT=1 && docker build --force-rm -t $IMAGE_TAG . && docker compose up
-
+# Avoid prompts with apt
 ###############################################################################
 #see https://github.com/jupyter/docker-stacks/blob/master/datascience-notebook/Dockerfile
 ARG BASE_CONTAINER=jupyter/datascience-notebook
 FROM $BASE_CONTAINER
 LABEL maintainer=rcmlz
+ENV DEBIAN_FRONTEND=noninteractive
 
 ###############################################################################
 # apt
@@ -44,9 +45,14 @@ ENV PATH=$PATH:/home/jovyan/.rakubrew/versions/$RAKUVERSION/install/share/perl6/
 RUN curl -LJO https://rakubrew.org/install-on-perl.sh && \
     sh install-on-perl.sh && \
     eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
-    echo 'eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"' >> ~/.bashrc && \
-    rakubrew build $RAKUVERSION && \
-    raku --version
+    echo 'eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"' >> ~/.bashrc
+
+RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
+    if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+            rakubrew download $RAKUVERSION; \
+    else \
+            rakubrew build $RAKUVERSION; \
+    fi
 
 ###############################################################################
 # zef
@@ -54,10 +60,12 @@ RUN curl -LJO https://rakubrew.org/install-on-perl.sh && \
 WORKDIR /tmp
 ENV PATH=$PATH:$HOME/.raku/bin
 USER root
-RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" && \
-    git clone https://github.com/ugexe/zef.git && \
-    cd zef && \
-    raku -I. bin/zef install .
+RUN if [ "$TARGETPLATFORM" != "linux/amd64" ]; then \
+            eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"; \
+            git clone https://github.com/ugexe/zef.git; \
+            cd zef; \
+            raku -I. bin/zef install . ; \
+    fi
 
 ###############################################################################
 # raku packages
