@@ -1,0 +1,18 @@
+# docker compose -f docker-compose-full.yml up
+# docker compose -f docker-compose-full.yml down --remove-orphans
+services:
+  jupyter:
+      #image: quay.io/jupyter/datascience-notebook
+      #image: quay.io/jupyter/minimal-notebook
+      image: rcmlz/edu-docker-env-full
+      ports:
+          - 8000:8888
+      volumes:
+          - type: bind
+            source: ${HOME}/docker-full
+            target: /home/jovyan/Dokumente
+      user: root
+      environment:
+          JUPYTER_ENABLE_LAB: "yes"
+          JUPYTER_TOKEN: "go" # effectively disable authentication by setting to an easy password 0000
+          GRANT_SUDO: "yes"

@@ -1,0 +1,37 @@
+bokeh # interactive plots
+bokeh-sampledata
+ipython
+ipympl # jupyter lab matplotlib extension
+ipywidgets
+ipydatawidgets
+jupyter-book
+jupyterlab-git
+jupyterlab-lsp
+jupyterlab-rise
+jupyterlab-widgets
+jedi-language-server
+jupytext
+keyboard
+litellm
+matplotlib
+mariadb
+metakernel
+mysql-connector
+numpy
+nodejs
+ollama
+openpyxl
+openai-whisper
+pandas
+pedal
+pillow
+plotly
+prettytable
+python-gnupg
+pycryptodome
+pylint
+requests
+seaborn
+tabulate
+pytest
+pytest-cov

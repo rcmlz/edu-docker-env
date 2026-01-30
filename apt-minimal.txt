@@ -1,0 +1,33 @@
+vim
+nano
+git-lfs
+git-crypt
+tree
+wget
+gnupg
+file
+p7zip
+zip
+unzip
+hyperfine
+build-essential
+pandoc
+imagemagick
+jq
+cowsay
+lolcat
+fortune
+jp2a
+cbonsai
+aewan
+figlet
+
+# Readline:ver<0.1.8>:auth<zef:clarkema>
+# https://packages.ubuntu.com/search?keywords=libreadline&searchon=names&suite=jammy&section=all
+libreadline-dev
+libzmq5-dev
+libssl-dev
+build-essential
+libmariadb3
+libmariadb-dev
+rlwrap
