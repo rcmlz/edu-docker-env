@@ -29,8 +29,10 @@ libreadline-dev
 libzmq5-dev
 libssl-dev
 build-essential
+rlwrap
 
-cpanminus
+libmariadb3
+libmariadb-dev
 
 texlive-full
 gnuplot

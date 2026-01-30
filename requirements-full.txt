@@ -1,0 +1,4 @@
+jupyterlab-git
+jupyterlab-rise
+ollama
+pedal

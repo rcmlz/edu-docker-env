@@ -8,3 +8,5 @@ Terminal::ANSIColor:ver<0.12>:auth<zef:raku-community-modules>
 Terminal::ANSIParser:ver<0.0.4>:auth<zef:japhb>
 Term::termios:ver<0.2.8>:auth<zef:krunen>
 Readline:ver<0.1.8>:auth<zef:clarkema>
+Linenoise
+Terminal::LineEditor
