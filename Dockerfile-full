@@ -15,8 +15,7 @@ WORKDIR /tmp
 USER root
 COPY apt-full.txt apt.txt
 RUN    apt-get update -y \
-    && grep -vE '^#' apt.txt | xargs apt-get install --yes --no-install-recommends \
-    && apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
+    && grep -vE '^#' apt.txt | xargs apt-get install --yes --no-install-recommends
 
 ###############################################################################
 # Rust
@@ -82,11 +81,9 @@ USER root
 RUN    rm -rf /tmp/* \
     && rm -rf ${HOME}/.git ${HOME}/.cache ${HOME}/.yarn ${HOME}/.cpan ${HOME}/.cpanm ${HOME}/.empty ${HOME}/.npm/_cacache \
     && rm -rf /root/* \
-    && find /var/log -type f -print0 | xargs -0 truncate -s 0
-
-USER root
-RUN fix-permissions "${HOME}"
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    && find /var/log -type f -print0 | xargs -0 truncate -s 0 \
+    && apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/* \
+    && fix-permissions "${HOME}"
 
 ###############################################################################
 # ready for starting jupyter
