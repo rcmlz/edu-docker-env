@@ -11,3 +11,5 @@ curl -o %DOCKER_COMPOSE_FILE% %DOCKER_COMPOSE_FILE_URL%
 docker compose -f %DOCKER_COMPOSE_FILE% up
 
 REM docker compose -f %DOCKER_COMPOSE_FILE% down --remove-orphans
+
+pause
