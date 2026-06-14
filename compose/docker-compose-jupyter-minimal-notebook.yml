@@ -1,0 +1,17 @@
+#mkdir $HOME/jupyter
+#docker compose --file docker-compose-jupyter-datascience-notebook.yml up"
+services:
+  jupyter:
+      image: quay.io/jupyter/minimal-notebook
+      ports:
+          - 8888:8888
+      volumes:
+          - type: bind
+            source: ${HOME}/jupyter
+            target: /home/jovyan/work
+      environment:
+          JUPYTER_ENABLE_LAB: "yes"
+          JUPYTER_TOKEN: "go" # would effectively disable authentication by setting to an easy password like 0000 in this example
+          GRANT_SUDO: "yes"
+  raku:
+      image: rakudo-star

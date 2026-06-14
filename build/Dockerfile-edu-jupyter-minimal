@@ -13,7 +13,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 ###############################################################################
 WORKDIR /tmp
 USER root
-#COPY apt.txt apt.txt
 COPY apt-minimal.txt apt.txt
 RUN apt-get update -y \
     && grep -vE '^#' apt.txt | xargs apt-get install --yes --no-install-recommends
@@ -21,38 +20,38 @@ RUN apt-get update -y \
 ###############################################################################
 # raku
 ###############################################################################
-WORKDIR /tmp
-USER "${NB_UID}"
-ARG RAKUVERSION='moar-2025.12'
-ENV PATH=$PATH:$HOME/.rakubrew/versions/$RAKUVERSION/install/share/perl6/site/bin:$HOME/.rakubrew/versions/$RAKUVERSION/install/bin
-RUN    curl -LJO https://rakubrew.org/install-on-perl.sh \
-    && chmod +x install-on-perl.sh \
-    && ./install-on-perl.sh \
-    && eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" \
-    && echo 'eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"' >> $HOME/.bashrc \
-    && eval "$(rakubrew download $RAKUVERSION)" \
-    && if ! command -v raku &> /dev/null ; then\
-        rakubrew build $RAKUVERSION;\
-    fi
+#WORKDIR /tmp
+#USER "${NB_UID}"
+#ARG RAKUVERSION='moar-2026.05'
+#ENV PATH=$PATH:$HOME/.rakubrew/versions/$RAKUVERSION/install/share/perl6/site/bin:$HOME/.rakubrew/versions/$RAKUVERSION/install/bin
+#RUN curl -LJO https://rakubrew.org/install-on-perl.sh
+#RUN chmod +x install-on-perl.sh
+#RUN ./install-on-perl.sh
+#RUN eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"
+#RUN echo 'eval "$($HOME/.rakubrew/bin/rakubrew init Bash)"' >> $HOME/.bashrc
+#RUN eval "$(rakubrew download $RAKUVERSION)"
+#RUN if ! command -v raku &> /dev/null ; then\
+#        rakubrew build $RAKUVERSION;\
+#    fi
 
 ###############################################################################
 # zef and raku packages
 ###############################################################################
-WORKDIR /tmp
-USER "${NB_UID}"
-COPY raku-packages.txt /tmp/raku-packages.txt
-RUN    eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" \
-    && git clone --depth 1 https://github.com/ugexe/zef.git \
-    && cd zef \
-    && raku -I. bin/zef install . \
-    && ZEF_TEST_DEGREE=`raku -e "say $*Kernel.cpu-cores"` \
-    && ZEF_FETCH_DEGREE=$ZEF_TEST_DEGREE \
-    && zef update \
-    && PACKAGE_NAME='Jupyter::Chatbook:auth<zef:antononcube>' \
-    && zef install --/test --deps-only "$PACKAGE_NAME" \
-    && zef install --/test "$PACKAGE_NAME" \
-    && jupyter-chatbook-raku --generate-config --location=$HOME/.local/share/jupyter/kernels/chatbook-raku \
-    && cat /tmp/raku-packages.txt | raku -e 'for $*IN.lines.grep(/^^\w/) { say shell "zef install --/test \"$_\"" }'
+#WORKDIR /tmp
+#USER "${NB_UID}"
+#COPY raku-packages.txt /tmp/raku-packages.txt
+#RUN    eval "$($HOME/.rakubrew/bin/rakubrew init Bash)" \
+#    && git clone --depth 1 https://github.com/ugexe/zef.git \
+#    && cd zef \
+#    && raku -I. bin/zef install . \
+#    && ZEF_TEST_DEGREE=`raku -e "say $*Kernel.cpu-cores"` \
+#    && ZEF_FETCH_DEGREE=$ZEF_TEST_DEGREE \
+#    && zef update \
+#    && PACKAGE_NAME='Jupyter::Chatbook:auth<zef:antononcube>' \
+#    && zef install --/test --deps-only "$PACKAGE_NAME" \
+#    && zef install --/test "$PACKAGE_NAME" \
+#    && jupyter-chatbook-raku --generate-config --location=$HOME/.local/share/jupyter/kernels/chatbook-raku \
+#    && cat /tmp/raku-packages.txt | raku -e 'for $*IN.lines.grep(/^^\w/) { say shell "zef install --/test \"$_\"" }'
 
 ###############################################################################
 # pip

@@ -9,7 +9,10 @@ start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 REM Wait a few seconds for Docker to initialize
 timeout /t 3 /nobreak > nul
 
-REM docker pull quay.io/jupyter/datascience-notebook
-REM docker pull quay.io/jupyter/minimal-notebook
-docker pull rcmlz/edu-docker-env-full
-REM docker pull rcmlz/edu-docker-env-minimal
+docker pull quay.io/jupyter/datascience-notebook
+docker pull quay.io/jupyter/minimal-notebook
+docker pull quay.io/hedgedoc/hedgedoc
+
+docker pull rakudo-star
+docker pull rcmlz/edu-jupyter-full
+docker pull rcmlz/edu-jupyter-minimal
