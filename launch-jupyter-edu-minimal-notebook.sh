@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKER_COMPOSE_FILE=compose/docker-compose-jupyter-datascience-notebook.yml
+DOCKER_COMPOSE_FILE=compose/docker-compose-rcmlz-edu-jupyter-minimal.yml
 URL="http://localhost:8888?token=go"
 
 echo -e "Mapping local folder $HOME/jupyter in the container."

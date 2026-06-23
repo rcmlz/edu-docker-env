@@ -12,7 +12,7 @@ REM ) else (
 REM     echo Starting Docker Desktop...
 REM     start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 REM 
-    REM Wait for Docker to be ready
+REM Wait for Docker to be ready
 REM     :wait_docker
 REM     docker info >nul 2>&1
 REM     if not %errorlevel%==0 (

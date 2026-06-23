@@ -3,9 +3,8 @@
 DOCKER_COMPOSE_FILE=compose/docker-compose-jupyter-minimal-notebook.yml
 URL="http://localhost:8888?token=go"
 
-echo ""
-echo "Mapping local folder $HOME/jupyter in the container."
-echo "Make sure to create the folder $HOME/jupyter if it does not exist yet."
+echo -e "Mapping local folder $HOME/jupyter in the container."
+mkdir -p "$HOME/jupyter"
 echo ""
 
 # start docker if it's not already running

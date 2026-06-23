@@ -10,3 +10,4 @@ Term::termios:ver<0.2.8>:auth<zef:krunen>
 Readline:ver<0.1.8>:auth<zef:clarkema>
 Linenoise
 Terminal::LineEditor
+Jupyter::Chatbook:auth<zef:antononcube>

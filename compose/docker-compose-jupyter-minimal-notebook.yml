@@ -13,5 +13,3 @@ services:
           JUPYTER_ENABLE_LAB: "yes"
           JUPYTER_TOKEN: "go" # would effectively disable authentication by setting to an easy password like 0000 in this example
           GRANT_SUDO: "yes"
-  raku:
-      image: rakudo-star

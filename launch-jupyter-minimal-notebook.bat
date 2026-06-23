@@ -5,6 +5,11 @@ set DOCKER_COMPOSE_FILE=compose\docker-compose-jupyter-minimal-notebook.yml
 set URL="http://localhost:8888?token=go"
 set HOME=%USERPROFILE%
 
+echo.
+echo Mapping local folder %USERPROFILE%\jupyter to the folder named work in the container.
+mkdir "%HOME%\jupyter" 2>nul
+echo.
+
 REM Check if Docker is running
 REM docker info >nul 2>&1
 REM if %errorlevel%==0 (
@@ -12,7 +17,7 @@ REM     echo Docker already running.
 REM ) else (
 REM    echo Starting Docker Desktop...
 REM    start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-    REM Wait for Docker to be ready
+REM Wait for Docker to be ready
 REM    :wait_docker
 REM    docker info >nul 2>&1
 REM    if not %errorlevel%==0 (

@@ -25,10 +25,12 @@ ffmpeg
 
 # Readline:ver<0.1.8>:auth<zef:clarkema>
 # https://packages.ubuntu.com/search?keywords=libreadline&searchon=names&suite=jammy&section=all
+rakudo
 libreadline-dev
 libzmq5-dev
 libssl-dev
 build-essential
+make
 rlwrap
 
 libmariadb3
@@ -39,4 +41,3 @@ gnuplot
 ghostscript
 pandoc
 imagemagick
-    
