@@ -9,8 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /tmp
 USER root
 COPY requirements-tiny.txt requirements.txt
-RUN pip install -r requirements.txt \
-    && pip cache purge
+RUN pip install -r requirements.txt
 
 ###############################################################################
 # clean up
