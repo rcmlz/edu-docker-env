@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set DOCKER_COMPOSE_FILE_NAME=docker-compose-rcmlz-edu-jupyter-full.yml
+set DOCKER_COMPOSE_FILE_NAME=docker-compose-rcmlz-edu-jupyter-tiny.yml
 set DOCKER_COMPOSE_FILE=%userprofile%\Downloads\%DOCKER_COMPOSE_FILE_NAME%
 set DOCKER_COMPOSE_FILE_URL=https://raw.githubusercontent.com/rcmlz/edu-docker-env/refs/heads/main/compose/%DOCKER_COMPOSE_FILE_NAME%
 set URL="http://localhost:8888?token=go"
