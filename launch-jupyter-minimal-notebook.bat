@@ -25,7 +25,7 @@ REM        timeout /t 1 >nul
 REM        echo "waiting for docker to start..."§
 REM        goto wait_docker
 REM    )
-REM)
+REM )
 
 REM Start docker compose in background
 start "" docker compose -f "%DOCKER_COMPOSE_FILE%" up --remove-orphans
