@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# check if DOCKER_COMPOSE_FILE_NAME and URL are defined
 if [[ -z "${DOCKER_COMPOSE_FILE_NAME+x}" ]]; then
     echo "ERROR: DOCKER_COMPOSE_FILE_NAME is not defined"
     exit 1
@@ -7,6 +8,12 @@ fi
 
 if [[ -z "${URL+x}" ]]; then
     echo "ERROR: URL is not defined."
+    exit 1
+fi
+
+# check if docker is running
+if ! docker info >/dev/null 2>&1; then
+    echo "ERROR: Docker not running."
     exit 1
 fi
 

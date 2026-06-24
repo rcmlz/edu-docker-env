@@ -11,6 +11,13 @@ if not defined URL (
     exit /b 1
 )
 
+REM Check if Docker is running
+docker info >nul 2>&1
+if %errorlevel%==1 (
+    echo ERROR: Docker not running.
+    exit /b 1
+)
+
 set DOCKER_COMPOSE_FILE=%userprofile%\Downloads\%DOCKER_COMPOSE_FILE_NAME%
 set DOCKER_COMPOSE_FILE_URL=https://raw.githubusercontent.com/rcmlz/edu-docker-env/refs/heads/main/compose/%DOCKER_COMPOSE_FILE_NAME%
 set HOME=%USERPROFILE%
