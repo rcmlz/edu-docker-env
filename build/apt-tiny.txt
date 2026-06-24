@@ -1,1 +1,4 @@
+zip
+unzip
+git-lfs
 rakudo
