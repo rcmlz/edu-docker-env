@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+if [[ -z "${DOCKER_COMPOSE_FILE_NAME+x}" ]]; then
+    echo "ERROR: DOCKER_COMPOSE_FILE_NAME is not defined"
+    exit 1
+fi
+
+if [[ -z "${URL+x}" ]]; then
+    echo "ERROR: URL is not defined."
+    exit 1
+fi
+
 DOCKER_COMPOSE_FILE="$HOME/Downloads/$DOCKER_COMPOSE_FILE_NAME"
 DOCKER_COMPOSE_FILE_URL="https://raw.githubusercontent.com/rcmlz/edu-docker-env/refs/heads/main/compose/$DOCKER_COMPOSE_FILE_NAME"
 

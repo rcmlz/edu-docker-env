@@ -1,6 +1,16 @@
 @echo off
 setlocal enabledelayedexpansion
 
+if not defined DOCKER_COMPOSE_FILE_NAME (
+    echo ERROR: DOCKER_COMPOSE_FILE_NAME is not defined.
+    exit /b 1
+)
+
+if not defined URL (
+    echo ERROR: URL is not defined.
+    exit /b 1
+)
+
 set DOCKER_COMPOSE_FILE=%userprofile%\Downloads\%DOCKER_COMPOSE_FILE_NAME%
 set DOCKER_COMPOSE_FILE_URL=https://raw.githubusercontent.com/rcmlz/edu-docker-env/refs/heads/main/compose/%DOCKER_COMPOSE_FILE_NAME%
 set HOME=%USERPROFILE%
