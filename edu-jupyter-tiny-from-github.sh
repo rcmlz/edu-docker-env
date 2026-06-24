@@ -10,7 +10,7 @@ mkdir -p "$HOME/jupyter"
 echo ""
 
 # Download docker-compose file
-curl -L -o "$DOCKER_COMPOSE_FILE" "$DOCKER_COMPOSE_FILE_URL"
+curl -f -o "$DOCKER_COMPOSE_FILE" "$DOCKER_COMPOSE_FILE_URL"
 
 # Start docker compose in background
 docker compose -f "$DOCKER_COMPOSE_FILE" up --remove-orphans &
