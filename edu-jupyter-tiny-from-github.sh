@@ -9,7 +9,19 @@ echo -e "Mapping local folder $HOME/jupyter in the container."
 mkdir -p "$HOME/jupyter"
 echo ""
 
+# Cleanup function
+cleanup() {
+    echo ""
+    echo "Stopping docker compose..."
+    docker compose -f "$DOCKER_COMPOSE_FILE" down --remove-orphans
+    echo "Done."
+}
+
+# Run cleanup on script exit (including Ctrl+C, terminal close, etc.)
+trap cleanup EXIT INT TERM
+
 # Download docker-compose file
+rm -f "$DOCKER_COMPOSE_FILE"
 curl -f -o "$DOCKER_COMPOSE_FILE" "$DOCKER_COMPOSE_FILE_URL"
 
 # Start docker compose in background
@@ -39,3 +51,6 @@ done
 
 # Open browser (macOS)
 open "$URL"
+
+# Keep script running so trap works when shell is closed
+wait
