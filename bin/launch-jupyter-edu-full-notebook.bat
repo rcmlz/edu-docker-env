@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set DOCKER_COMPOSE_FILE=compose\docker-compose-jupyter-datascience-notebook.yml
+set DOCKER_COMPOSE_FILE=..\compose\docker-compose-rcmlz-edu-jupyter-full.yml
 set URL="http://localhost:8888?token=go"
 set HOME=%USERPROFILE%
 
@@ -15,15 +15,14 @@ REM docker info >nul 2>&1
 REM if %errorlevel%==0 (
 REM     echo Docker already running.
 REM ) else (
-REM     echo Starting Docker Desktop...
+REM    echo Starting Docker Desktop...
 REM    start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-
 REM Wait for Docker to be ready
 REM    :wait_docker
 REM    docker info >nul 2>&1
 REM    if not %errorlevel%==0 (
 REM        timeout /t 1 >nul
-REM        echo "waiting for docker to start..."
+REM        echo "waiting for docker to start..."§
 REM        goto wait_docker
 REM    )
 REM )
@@ -36,7 +35,7 @@ REM Wait until container is "Up"
 docker compose -f "%DOCKER_COMPOSE_FILE%" ps | findstr /C:"Up" >nul
 if errorlevel 1 (
     timeout /t 1 >nul
-    echo "waiting for Container to start..."
+    echo "waiting for container to start..."
     goto wait_container
 )
 
@@ -49,7 +48,7 @@ REM Wait until service is reachable
 curl -fsS "%URL%" >nul 2>&1
 if errorlevel 1 (
     timeout /t 1 >nul
-    echo "waiting for Jupyter to start..."
+    echo "waiting for Jupyter Notebook to start..."
     goto wait_http
 )
 

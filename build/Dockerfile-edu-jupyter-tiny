@@ -4,6 +4,15 @@ LABEL maintainer=rcmlz
 ENV DEBIAN_FRONTEND=noninteractive
 
 ###############################################################################
+# apt
+###############################################################################
+WORKDIR /tmp
+USER root
+COPY apt-tiny.txt apt.txt
+RUN    apt-get update -y \
+    && grep -vE '^#' apt.txt | xargs apt-get install --yes --no-install-recommends
+
+###############################################################################
 # pip
 ###############################################################################
 WORKDIR /tmp

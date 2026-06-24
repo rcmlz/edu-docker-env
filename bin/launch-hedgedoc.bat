@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set DOCKER_COMPOSE_FILE=compose\docker-compose-hedgedoc.yml
+set DOCKER_COMPOSE_FILE=..\compose\docker-compose-hedgedoc.yml
 set URL=http://localhost:3000
 
 REM Check if Docker is running

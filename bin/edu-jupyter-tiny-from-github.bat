@@ -12,7 +12,8 @@ echo Mapping local folder %USERPROFILE%\jupyter to the folder named work in the 
 mkdir "%HOME%\jupyter" 2>nul
 echo.
 
-curl -o %DOCKER_COMPOSE_FILE% %DOCKER_COMPOSE_FILE_URL%
+del %DOCKER_COMPOSE_FILE%
+curl -f -o %DOCKER_COMPOSE_FILE% %DOCKER_COMPOSE_FILE_URL%
 docker compose -f %DOCKER_COMPOSE_FILE% up --remove-orphans &
 
 REM Wait until container is "Up"

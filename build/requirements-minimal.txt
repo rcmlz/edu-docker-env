@@ -2,3 +2,6 @@ jupyterlab-git
 jupyterlab-rise
 ollama
 pedal
+pandas
+numpy
+matplotlib

@@ -8,7 +8,7 @@ services:
       volumes:
           - type: bind
             source: ${HOME}/jupyter
-            target: /home/jovyan/work
+            target: /home/jovyan
       environment:
           JUPYTER_ENABLE_LAB: "yes"
           JUPYTER_TOKEN: "go" # would effectively disable authentication by setting to an easy password like 0000 in this example

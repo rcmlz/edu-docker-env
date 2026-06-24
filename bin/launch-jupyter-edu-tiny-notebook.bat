@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set DOCKER_COMPOSE_FILE=compose\docker-compose-jupyter-minimal-notebook.yml
+set DOCKER_COMPOSE_FILE=..\compose\docker-compose-rcmlz-edu-jupyter-tiny.yml
 set URL="http://localhost:8888?token=go"
 set HOME=%USERPROFILE%
 
