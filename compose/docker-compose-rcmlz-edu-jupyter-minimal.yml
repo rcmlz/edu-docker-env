@@ -10,7 +10,7 @@ services:
       volumes:
           - type: bind
             source: ${HOME}/jupyter
-            target: /home/jovyan
+            target: /home/jovyan/work
       user: root
       environment:
           JUPYTER_ENABLE_LAB: "yes"
