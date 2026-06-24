@@ -3,7 +3,7 @@
 # docker compose -f docker-compose-rcmlz-edu-jupyter-minimal.yml down --remove-orphans
 # open http://localhost:8888
 services:
-  jupyter:
+  jupyter-edu-minimal:
       image: rcmlz/edu-jupyter-minimal
       ports:
           - 8888:8888

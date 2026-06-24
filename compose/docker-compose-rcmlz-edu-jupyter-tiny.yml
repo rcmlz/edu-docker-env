@@ -1,9 +1,9 @@
 # mkdir ${HOME}/jupyter
-# docker compose -f docker-compose-rcmlz-edu-jupyter-minimal.yml up
-# docker compose -f docker-compose-rcmlz-edu-jupyter-minimal.yml down --remove-orphans
+# docker compose -f docker-compose-rcmlz-edu-jupyter-tiny.yml up
+# docker compose -f docker-compose-rcmlz-edu-jupyter-tiny.yml down --remove-orphans
 # open http://localhost:8888
 services:
-  jupyter:
+  jupyter-edu-tiny:
       image: rcmlz/edu-jupyter-tiny
       ports:
           - 8888:8888

@@ -1,7 +1,7 @@
 #mkdir $HOME/jupyter
 #docker compose --file docker-compose-jupyter-datascience-notebook.yml up"
 services:
-  jupyter:
+  jupyter-datascience-notebook:
       image: quay.io/jupyter/datascience-notebook
       ports:
           - 8888:8888

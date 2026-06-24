@@ -1,7 +1,7 @@
 # mkdir ${HOME}/jupyter
 # docker compose -f docker-compose-rcmlz-edu-jupyter-full.yml up
 services:
-  jupyter:
+  jupyter-edu-full:
       image: rcmlz/edu-jupyter-full
       ports:
           - 8888:8888
