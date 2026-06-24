@@ -10,7 +10,7 @@ echo Mapping local folder %USERPROFILE%\jupyter to the folder named work in the 
 mkdir "%HOME%\jupyter" 2>nul
 echo.
 
-REM donwload docker-compose file when online, otherwise keep existing file
+REM download docker-compose file when online, otherwise keep existing file
 set TMP_FILE=%DOCKER_COMPOSE_FILE%.tmp
 curl -f -o "%TMP_FILE%" "%DOCKER_COMPOSE_FILE_URL%"
 if not errorlevel 1 (
