@@ -71,7 +71,7 @@ docker save --platform=linux/arm64 --input edu-jupyter-tiny-arm64.tar.gz
 
 ### Linux
 ```bash
-cd /media/run/$USER/Ventoy
+cd /run/media/$USER/Ventoy
 ls -lh
 docker load --platform=linux/amd64 --input edu-jupyter-full-amd64.tar.gz
 docker load --platform=linux/amd64 --input edu-jupyter-minimal-amd64.tar.gz
