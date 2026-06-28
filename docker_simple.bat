@@ -51,6 +51,14 @@ if not errorlevel 1 (
 REM Open browser
 start "" "%URL%"
 
+echo.
+echo "###########################################################"
+echo "#"
+echo "#  Open %URL% in your browser!"
+echo "#"
+echo "###########################################################"
+echo.
+
 docker compose -f %DOCKER_COMPOSE_FILE% up --remove-orphans
 
 endlocal

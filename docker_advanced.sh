@@ -54,7 +54,11 @@ while true; do
 done
 
 echo
-echo "Open $URL in your browser to access Jupyter."
+echo "###########################################################"
+echo "#"
+echo "#  Open $URL in your browser!"
+echo "#"
+echo "###########################################################"
 echo
 
 # Wait until service is reachable
