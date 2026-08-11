@@ -32,7 +32,8 @@ if /I "%PROCESSOR_ARCHITECTURE%"=="ARM64" (
   set "PA=amd64"
 )
 
-for %%F in (edu-jupyter-full-%PA%.tar.gz edu-jupyter-minimal-%PA%.tar.gz edu-jupyter-tiny-%PA%.tar.gz) do (
+REM for %%F in (edu-jupyter-full-%PA%.tar.gz edu-jupyter-minimal-%PA%.tar.gz edu-jupyter-tiny-%PA%.tar.gz) do (
+for %%F in (edu-jupyter-minimal-%PA%.tar.gz edu-jupyter-tiny-%PA%.tar.gz) do (
   echo docker load --platform=linux/%PA% --input %%F
   docker load --platform=linux/%PA% --input %%F
 )
