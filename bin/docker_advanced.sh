@@ -62,7 +62,7 @@ echo "###########################################################"
 echo
 
 # Wait until service is reachable
-echo "Waiting for Jupyter to start..."
+echo "Waiting for Application to start..."
 while true; do
     if curl -fsS "$URL" >/dev/null 2>&1; then
         break

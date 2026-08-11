@@ -58,7 +58,7 @@ REM Wait until service is reachable
 curl -fsS "%URL%" >nul 2>&1
 if errorlevel 1 (
     timeout /t 1 >nul
-    echo "waiting for Jupyter to start..."
+    echo "waiting for container to start..."
     goto wait_http
 )
 

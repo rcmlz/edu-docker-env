@@ -25,6 +25,14 @@ docker compose -f compose/docker-compose-rcmlz-edu-jupyter-minimal.yml up --remo
 docker compose -f compose/docker-compose-rcmlz-edu-jupyter-full.yml up --remove-orphans
 ```
 
+```bash
+docker compose -f compose/docker-compose-rcmlz-edu-jupyter-tiny.yml up --remove-orphans
+```
+
+```bash
+docker compose -f compose/docker-compose-hedgedoc up --remove-orphans
+```
+
 ## Build and Launch Yourself
 
 ```bash
