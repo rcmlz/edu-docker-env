@@ -44,8 +44,13 @@ if not errorlevel 1 (
     del "%DOCKER_COMPOSE_FILE%" 2>nul
     move /Y "%TMP_FILE%" "%DOCKER_COMPOSE_FILE%" >nul
 ) else (
-    echo Download failed, keeping existing file.
-    del "%TMP_FILE%" 2>nul
+    if exist "%DOCKER_COMPOSE_FILE%" (
+        echo Download failed, keeping existing file.
+        del "%TMP_FILE%" 2>nul
+    ) else (
+        echo Download failed, no old download found, using repo file.
+        set DOCKER_COMPOSE_FILE=%userprofile%\edu-docker-env\compose\%DOCKER_COMPOSE_FILE_NAME%
+    )
 )
 
 REM Open browser

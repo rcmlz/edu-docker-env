@@ -27,15 +27,20 @@ echo Mapping local folder %USERPROFILE%\jupyter to the folder named work in the 
 mkdir "%HOME%\jupyter" 2>nul
 echo.
 
-REM download docker-compose file when online, otherwise keep existing file
+REM download docker-compose file when online, otherwise keep existing file or file from repo
 set TMP_FILE=%DOCKER_COMPOSE_FILE%.tmp
 curl -f -o "%TMP_FILE%" "%DOCKER_COMPOSE_FILE_URL%"
 if not errorlevel 1 (
     del "%DOCKER_COMPOSE_FILE%" 2>nul
     move /Y "%TMP_FILE%" "%DOCKER_COMPOSE_FILE%" >nul
 ) else (
-    echo Download failed, keeping existing file.
-    del "%TMP_FILE%" 2>nul
+    if exist "%DOCKER_COMPOSE_FILE%" (
+        echo Download failed, keeping existing file.
+        del "%TMP_FILE%" 2>nul
+    ) else (
+        echo Download failed, no old download found, using repo file.
+        set DOCKER_COMPOSE_FILE=%userprofile%\edu-docker-env\compose\%DOCKER_COMPOSE_FILE_NAME%
+    )
 )
 
 docker compose -f %DOCKER_COMPOSE_FILE% up --remove-orphans &
