@@ -1,7 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-DOCKER_COMPOSE_FILE=compose/docker-compose-hedgedoc.yml
-URL="http://localhost:3000"
+CURRENT_PATH=`dirname -- "$( readlink -f -- "$0"; )"`
+DOCKER_COMPOSE_FILE=$CURRENT_PATH/../compose/docker-compose-jupyter-datascience-notebook.yml
+URL="http://localhost:8888?token=go"
+
+echo -e "Mapping local folder $HOME/jupyter in the container."
+mkdir -p "$HOME/jupyter"
+echo ""
+
+# Cleanup function
+cleanup() {
+    echo ""
+    echo "Stopping docker compose..."
+    docker compose -f "$DOCKER_COMPOSE_FILE" down --remove-orphans
+    echo "Done."
+}
+
+# Run cleanup on script exit (including Ctrl+C, terminal close, etc.)
+trap cleanup EXIT INT TERM
 
 # start docker if it's not already running
 #if docker info >/dev/null 2>&1; then
@@ -18,17 +34,6 @@ URL="http://localhost:3000"
 #    done
 #fi
 
-# Cleanup function
-cleanup() {
-    echo ""
-    echo "Stopping docker compose..."
-    docker compose -f "$DOCKER_COMPOSE_FILE" down --remove-orphans
-    echo "Done."
-}
-
-# Run cleanup on script exit (including Ctrl+C, terminal close, etc.)
-trap cleanup EXIT INT TERM
-
 docker compose -f $DOCKER_COMPOSE_FILE up --remove-orphans &
 
 until docker compose -f "$DOCKER_COMPOSE_FILE" ps | grep -q "Up"; do
@@ -36,15 +41,15 @@ until docker compose -f "$DOCKER_COMPOSE_FILE" ps | grep -q "Up"; do
     echo "waiting for Container to start..."
 done
 
-echo ""
-echo "Open $URL in your browser to access HedgeDoc."
-echo ""
-
 # wait until the jupyter notebook is reachable
 until curl -fsS "$URL" >/dev/null 2>&1; do
     sleep 1
-    echo "waiting for HedgeDoc to start..."
+    echo "waiting for Jupyter Notebook to start..."
 done
+
+echo ""
+echo "Open $URL in your browser to access Jupyter Notebook."
+echo ""
 
 open $URL || xdg-open $URL || sensible-browser $URL || x-www-browser $URL || gnome-open $URL
 
