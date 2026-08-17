@@ -64,6 +64,7 @@ echo "#"
 echo "###########################################################"
 echo.
 
+echo echo docker compose -f %DOCKER_COMPOSE_FILE% up --remove-orphans
 docker compose -f %DOCKER_COMPOSE_FILE% up --remove-orphans
 
 endlocal
