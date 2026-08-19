@@ -39,7 +39,7 @@ trap cleanup EXIT INT TERM
 if curl -fsS "$URL" >/dev/null 2>&1; then
     rm -f "$DOCKER_COMPOSE_FILE"
 fi
-curl -f -o "$DOCKER_COMPOSE_FILE" "$DOCKER_COMPOSE_FILE_URL"
+curl --connect-timeout 5  --max-time 30 -f -o "$DOCKER_COMPOSE_FILE" "$DOCKER_COMPOSE_FILE_URL"
 
 # Start docker compose in background
 docker compose -f "$DOCKER_COMPOSE_FILE" up --remove-orphans &

@@ -37,3 +37,5 @@ for %%F in (edu-jupyter-full-%PA%.tar.gz edu-jupyter-minimal-%PA%.tar.gz edu-jup
   echo docker load --platform=linux/%PA% --input %%F
   docker load --platform=linux/%PA% --input %%F
 )
+
+pause

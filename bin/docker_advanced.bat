@@ -29,7 +29,7 @@ echo.
 
 REM download docker-compose file when online, otherwise keep existing file or file from repo
 set TMP_FILE=%DOCKER_COMPOSE_FILE%.tmp
-curl -f -o "%TMP_FILE%" "%DOCKER_COMPOSE_FILE_URL%"
+curl --connect-timeout 5 --max-time 30 -f -o "%TMP_FILE%" "%DOCKER_COMPOSE_FILE_URL%"
 if not errorlevel 1 (
     del "%DOCKER_COMPOSE_FILE%" 2>nul
     move /Y "%TMP_FILE%" "%DOCKER_COMPOSE_FILE%" >nul
